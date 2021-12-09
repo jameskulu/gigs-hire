@@ -5,10 +5,12 @@ ROLE_CHOICES = (
     ("admin", "admin"),
 )
 
+
 class User(models.Model):
     email = models.EmailField(unique=True)
     firstName = models.CharField(max_length=150, blank=True, null=True)
     lastName = models.CharField(max_length=150, blank=True, null=True)
+    password = models.CharField(max_length=150)
     about = models.TextField(max_length=500, blank=True, null=True)
     role = models.CharField(max_length=5, choices=ROLE_CHOICES, default="user")
     isActive = models.BooleanField(default=True)
