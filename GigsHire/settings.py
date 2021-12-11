@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     "rest_framework",
     # Custom Apps
     "Accounts.apps.AccountsConfig",
+    "Category.apps.CategoryConfig",
+    "Musician.apps.MusicianConfig",
 ]
 
 MIDDLEWARE = [
@@ -120,3 +122,5 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
+
+CLIENT_BASE_URL = config("CLIENT_BASE_URL")

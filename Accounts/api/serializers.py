@@ -1,14 +1,15 @@
 from rest_framework import serializers
-from ..models import User
+from ..models import Musician
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
     firstName = serializers.CharField(required=True)
     lastName = serializers.CharField(required=True)
+    category = serializers.IntegerField(required=True)
 
     class Meta:
-        model = User
-        fields = ["firstName", "lastName", "email", "password"]
+        model = Musician
+        fields = ["firstName", "lastName", "email", "password", "category"]
         extra_kwargs = {"password": {"write_only": True}}
 
     # def validate(self, data):
@@ -51,5 +52,5 @@ class LoginSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255, min_length=2)
 
     class Meta:
-        model = User
+        model = Musician
         fields = ["email", "password"]

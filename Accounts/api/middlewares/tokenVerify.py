@@ -1,7 +1,7 @@
 import jwt
 from rest_framework import authentication, exceptions
 from django.conf import settings
-from ...models import User
+from ...models import Musician
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
@@ -15,8 +15,8 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         try:
             payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
-            user = User.objects.get(id=payload["id"])
-            return (user, token)
+            musician = Musician.objects.get(id=payload["id"])
+            return (musician, token)
 
         except jwt.DecodeError as identifier:
             raise exceptions.AuthenticationFailed("Your token is invalid")
