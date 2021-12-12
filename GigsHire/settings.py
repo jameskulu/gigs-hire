@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import config
+import django_heroku
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -124,3 +125,6 @@ REST_FRAMEWORK = {
 }
 
 CLIENT_BASE_URL = config("CLIENT_BASE_URL")
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
