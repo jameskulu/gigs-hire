@@ -130,6 +130,7 @@ CLIENT_BASE_URL = config("CLIENT_BASE_URL")
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://api-gigshire.herokuapp.com",
 ]
 
 # Activate Django-Heroku.
