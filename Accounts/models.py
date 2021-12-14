@@ -14,6 +14,7 @@ class Musician(models.Model):
     lastName = models.CharField(max_length=150, blank=True, null=True)
     password = models.CharField(max_length=150)
     about = models.TextField(max_length=500, blank=True, null=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     phone_number = models.TextField(max_length=500, blank=True, null=True)
     address = models.TextField(max_length=150, blank=True, null=True)
     city = models.TextField(max_length=150, blank=True, null=True)

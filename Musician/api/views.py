@@ -49,11 +49,12 @@ def send_enquiry_musician(request):
         data = {}
         serializer = SendMailMusicianSerializer(data=request.data)
         if serializer.is_valid():
-            subject = "Enquiry from GigsHire"
+            email = serializer.validated_data["email"]
+            subject = f"Enquiry from GigsHire - {email}"
             html_message = serializer.validated_data["message"]
             plain_message = strip_tags(html_message)
             from_email = settings.EMAIL_HOST_USER
-            to = serializer.validated_data["email"]
+            to = serializer.validated_data["recipient"]
 
             send_mail(
                 subject, plain_message, from_email, [to], html_message=html_message
