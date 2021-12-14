@@ -128,10 +128,13 @@ REST_FRAMEWORK = {
 
 CLIENT_BASE_URL = config("CLIENT_BASE_URL")
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://api-gigshire.herokuapp.com",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "https://api-gigshire.herokuapp.com",
+# ]
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
