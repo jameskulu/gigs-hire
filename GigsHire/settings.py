@@ -9,7 +9,7 @@ SECRET_KEY = config("SECRET_KEY")
 
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -130,6 +130,7 @@ CLIENT_BASE_URL = config("CLIENT_BASE_URL")
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = False
+
 
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",
