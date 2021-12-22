@@ -8,8 +8,13 @@ class MusicianSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Musician
-        # fields = ["id","firstName", "lastName", "email"]
-        fields = "__all__"
+        exclude = (
+            "password",
+            "emailToken",
+            "emailTokenExpireDate",
+            "resetToken",
+            "resetTokenExpireDate",
+        )
 
 
 class SendMailMusicianSerializer(serializers.Serializer):

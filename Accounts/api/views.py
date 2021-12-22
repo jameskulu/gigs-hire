@@ -7,8 +7,10 @@ from django.contrib.auth.hashers import make_password, check_password
 
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+
+from Musician.api.serializers import MusicianSerializer
 from .serializers import (
     LoginSerializer,
     RegistrationSerializer,
@@ -18,6 +20,8 @@ from .serializers import (
 )
 from ..models import Musician
 from .middlewares.musicianVerify import verify_musician
+from .middlewares.tokenVerify import verify_token
+from rest_framework.permissions import IsAuthenticated
 from Category.models import Category
 
 
@@ -127,13 +131,15 @@ def login(request):
                 {"id": musician.id}, settings.JWT_SECRET_KEY, algorithm="HS256"
             )
 
-            data = {
-                "success": True,
-                "token": token,
-            }
+            serialize = MusicianSerializer(musician, context={"request": request})
+
+            data = {"success": True, "token": token, "data": serialize.data}
             return Response(data, status=status.HTTP_201_CREATED)
 
-        data = {"success": False, "details": serializer.errors}
+        data = {
+            "success": False,
+            "details": serializer.errors,
+        }
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -217,3 +223,69 @@ def reset_password(request):
 
         data = {"success": False, "details": serializer.errors}
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(
+    [
+        "GET",
+    ]
+)
+@verify_token
+def logged_in_musician(request):
+    data = {}
+    try:
+        user_id = request.user["id"]
+        musician = Musician.objects.get(pk=user_id)
+    except Musician.DoesNotExist:
+        data = {"success": False, "details": "Musician not found"}
+        return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = MusicianSerializer(musician, context={"request": request})
+    data = {"success": True, "data": serializer.data}
+    return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(
+    [
+        "POST",
+    ]
+)
+def valid_token(request):
+    data = {}
+    auth_data = request.META.get("HTTP_AUTHORIZATION")
+    if not auth_data:
+        data = {
+            "valid": False,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    prefix, token = auth_data.split(" ")
+
+    if not token:
+        data = {
+            "valid": False,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    try:
+        verified = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+    except jwt.exceptions.DecodeError:
+        print("yooo")
+        data = {
+            "valid": False,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    try:
+        musician = Musician.objects.get(pk=verified["id"])
+        data = {
+            "valid": True,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    except Musician.DoesNotExist:
+        print("haha")
+
+        data = {
+            "valid": False,
+        }
+        return Response(data, status=status.HTTP_404_NOT_FOUND)

@@ -120,9 +120,9 @@ JWT_SECRET_KEY = config("JWT_SECRET_KEY")
 
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "Accounts.api.middlewares.tokenVerify.JWTAuthentication",
-    ),
+    # "DEFAULT_AUTHENTICATION_CLASSES": (
+    #     "Accounts.api.middlewares.tokenVerify.JWTAuthentication",
+    # ),
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
